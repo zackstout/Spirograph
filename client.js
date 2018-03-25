@@ -6,6 +6,9 @@ allPoints = [];
 var radius1;
 var radius2;
 
+var radii = [];
+var speeds = [];
+
 var center2 = {x: 0, y:0};
 var radius3;
 var angle2;
@@ -21,6 +24,9 @@ var quadDeep = false;
 
 var userMoons;
 var radius, speed;
+
+var planetSpeed;
+
 
 // Setup eclipses this:
 $(document).ready(function() {
@@ -58,21 +64,32 @@ function setup() {
       alert('Please enter a value between 1 and 3.');
     }
 
+    $('#levels').append("<p>Planet radius from sun: <input type='number' id='planetRad' value='200'>");
+    $('#levels').append("<p>Planet speed: <input type='number' id='planetSpeed' value='0.01'>");
+
     // Create moon input fields:
     for (var i=0; i < int; i++) {
       // Yes, the parentheses do make a different for i + 1:
-      $("#levels").append("<p>Moon " + (i + 1) + ":<p>Radius: <input type='number' id='rad" + i + "'></p> <p>Orbital Speed: <input type='number' id='speed" + i + "'></p><br>");
+      $("#levels").append("<p>Moon " + (i + 1) + ":<p>Radius: <input type='number' value='25' id='rad" + i + "'></p> <p>Orbital Speed: <input type='number' value='0.02' id='speed" + i + "'></p><br>");
     }
 
   }); // end .change
 
   // Submit specifications for spirograph:
   $('#sub').on('click', function() {
-
+    planetSpeed = parseFloat($('#planetSpeed').val());
+    // clear out:
+    radii = [];
+    speeds = [];
+    // User can change original planet's radius:
+    planetRad = parseInt($('#planetRad').val());
+    console.log(planetRad);
     for (var i=0; i < userMoons; i++) {
       radius = parseInt($('#rad' + i).val());
-      speed = parseInt($('#speed' + i).val());
-      console.log(radius);
+      speed = parseFloat($('#speed' + i).val());
+      console.log(speed);
+      radii.push(radius);
+      speeds.push(speed);
     }
 
     noLoop();
@@ -84,10 +101,10 @@ function setup() {
     angle1 = 0;
     angle2 = 0;
     angle3 = 0;
-    radius1 = 200;
-    radius2 = 62;
-    radius3 = 35;
-    radius4 = 22;
+    radius1 = planetRad;
+    radius2 = radii[0];
+    radius3 = radii.length > 1 ? radii[1] : 28;
+    radius4 = radii.length > 2 ? radii[2] : 22;
 
     push();
     translate(width/2, height/2);
@@ -190,10 +207,18 @@ function draw() {
 
 
   // if angle1 is n*angle, then will createa  flower with (n - 1) petals!!!
-  angle += 0.01;
-  angle1 += 0.042;
-  angle2 += 0.05;
-  angle3 += 0.06;
+
+  // Final place to grab user input:
+
+  speed0 = planetSpeed > 0 ? planetSpeed : 0.01;
+  angle += speed0;
+
+  speed1 = speeds.length > 0 ? speeds[0] : 0.027;
+  speed2 = speeds.length > 1 ? speeds[1] : 0.042;
+  speed3 = speeds.length > 2 ? speeds[2] : 0.025;
+  angle1 += speed1;
+  angle2 += speed2;
+  angle3 += speed3;
 
 
   allPoints.forEach(function(point) {
