@@ -17,32 +17,68 @@ var angle3;
 var center4 = {x:0, y:0};
 
 var tripleDeep = false;
-var quadDeep = true;
+var quadDeep = false;
 
+var userMoons;
+var radius, speed;
 
+// Setup eclipses this:
 $(document).ready(function() {
-  console.log('hi i am ready');
-  
-  $('#lvls').change(function() {
-    $('#levels').empty();
-    var int = parseInt($('#lvls').val());
-
-    // Validate input:
-    if (int > 5) {
-      alert('Please enter a value between 1 and 5.');
-    }
-
-    // Create moon input fields:
-    for (var i=0; i < int; i++) {
-      $("#levels").append("<p>Radius: <input type='number' id='rad'" + i + "></p> <p>Oribtal Speed: <input type='number' id='speed'" + i + "></p><br>");
-    }
-
-  });
 });
 
 function setup() {
   createCanvas(800, 800);
   background(101);
+
+  // Triggered on pressing Enter:
+  $('#lvls').change(function() {
+    $('#levels').empty();
+    var int = parseInt($('#lvls').val());
+    userMoons = int;
+
+    switch(int) {
+      case 1:
+        tripleDeep = false;
+        quadDeep = false;
+      break;
+
+      case 2:
+        tripleDeep = true;
+        quadDeep = false;
+      break;
+
+      case 3:
+        tripleDeep = false;
+        quadDeep = true;
+      break;
+    }
+
+    // Validate input:
+    if (int > 5) {
+      alert('Please enter a value between 1 and 3.');
+    }
+
+    // Create moon input fields:
+    for (var i=0; i < int; i++) {
+      // Yes, the parentheses do make a different for i + 1:
+      $("#levels").append("<p>Moon " + (i + 1) + ":<p>Radius: <input type='number' id='rad" + i + "'></p> <p>Orbital Speed: <input type='number' id='speed" + i + "'></p><br>");
+    }
+
+  });
+
+  // Submit specifications for spirograph:
+  $('#sub').on('click', function() {
+
+    for (var i=0; i < userMoons; i++) {
+      radius = parseInt($('#rad' + i).val());
+      speed = parseInt($('#speed' + i).val());
+      // console.log(radius);
+    }
+
+    // Will want a clearInt, a new Interval, etc.
+
+  });
+
   angle = 0;
   angle1 = 0;
   angle2 = 0;
