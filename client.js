@@ -64,7 +64,7 @@ function setup() {
       $("#levels").append("<p>Moon " + (i + 1) + ":<p>Radius: <input type='number' id='rad" + i + "'></p> <p>Orbital Speed: <input type='number' id='speed" + i + "'></p><br>");
     }
 
-  });
+  }); // end .change
 
   // Submit specifications for spirograph:
   $('#sub').on('click', function() {
@@ -72,8 +72,30 @@ function setup() {
     for (var i=0; i < userMoons; i++) {
       radius = parseInt($('#rad' + i).val());
       speed = parseInt($('#speed' + i).val());
-      // console.log(radius);
+      console.log(radius);
     }
+
+    noLoop();
+    // createCanvas(800, 800);
+    allPoints = [];
+    background(101);
+
+    angle = 0;
+    angle1 = 0;
+    angle2 = 0;
+    angle3 = 0;
+    radius1 = 200;
+    radius2 = 62;
+    radius3 = 35;
+    radius4 = 22;
+
+    push();
+    translate(width/2, height/2);
+    rotate(angle);
+    ellipse(radius1, 0, 5, 5);
+    pop();
+
+    loop();
 
     // Will want a clearInt, a new Interval, etc.
 
@@ -93,18 +115,18 @@ function setup() {
   rotate(angle);
   ellipse(radius1, 0, 5, 5);
   pop();
-}
+} // end setup
 
 function draw() {
   background(101);
 
-  // Original planet;
+  // Original planet:
   push();
   translate(width/2, height/2);
   rotate(angle);
   center1.x = radius1 * Math.cos(angle);
   center1.y = radius1 * Math.sin(angle);
-  fill('red');
+  fill('green');
   ellipse(radius1, 0, 5, 5);
   pop();
 
