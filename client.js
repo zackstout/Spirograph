@@ -27,96 +27,15 @@ var radius, speed;
 
 var planetSpeed;
 
-
-// Setup eclipses this:
-$(document).ready(function() {
-});
-
 function setup() {
   createCanvas(800, 800);
   background(101);
 
   // Triggered on pressing Enter:
-  $('#lvls').change(function() {
-    $('#levels').empty();
-    var int = parseInt($('#lvls').val());
-    userMoons = int;
-
-    switch(int) {
-      case 1:
-        tripleDeep = false;
-        quadDeep = false;
-      break;
-
-      case 2:
-        tripleDeep = true;
-        quadDeep = false;
-      break;
-
-      case 3:
-        tripleDeep = false;
-        quadDeep = true;
-      break;
-    }
-
-    // Validate input:
-    if (int > 5) {
-      alert('Please enter a value between 1 and 3.');
-    }
-
-    $('#levels').append("<p>Planet radius from sun: <input type='number' id='planetRad' value='200'>");
-    $('#levels').append("<p>Planet speed: <input type='number' id='planetSpeed' value='0.01'>");
-
-    // Create moon input fields:
-    for (var i=0; i < int; i++) {
-      // Yes, the parentheses do make a different for i + 1:
-      $("#levels").append("<p>Moon " + (i + 1) + ":<p>Radius: <input type='number' value='25' id='rad" + i + "'></p> <p>Orbital Speed: <input type='number' value='0.02' id='speed" + i + "'></p><br>");
-    }
-
-  }); // end .change
+  $('#lvls').change(changeLevels); // end .change
 
   // Submit specifications for spirograph:
-  $('#sub').on('click', function() {
-    planetSpeed = parseFloat($('#planetSpeed').val());
-    // clear out:
-    radii = [];
-    speeds = [];
-    // User can change original planet's radius:
-    planetRad = parseInt($('#planetRad').val());
-    console.log(planetRad);
-    for (var i=0; i < userMoons; i++) {
-      radius = parseInt($('#rad' + i).val());
-      speed = parseFloat($('#speed' + i).val());
-      console.log(speed);
-      radii.push(radius);
-      speeds.push(speed);
-    }
-
-    noLoop();
-    // createCanvas(800, 800);
-    allPoints = [];
-    background(101);
-
-    angle = 0;
-    angle1 = 0;
-    angle2 = 0;
-    angle3 = 0;
-    radius1 = planetRad;
-    radius2 = radii[0];
-    radius3 = radii.length > 1 ? radii[1] : 28;
-    radius4 = radii.length > 2 ? radii[2] : 22;
-
-    push();
-    translate(width/2, height/2);
-    rotate(angle);
-    ellipse(radius1, 0, 5, 5);
-    pop();
-
-    loop();
-
-    // Will want a clearInt, a new Interval, etc.
-
-  });
+  $('#sub').on('click', submitSpecs);
 
   angle = 0;
   angle1 = 0;
@@ -134,6 +53,7 @@ function setup() {
   pop();
 } // end setup
 
+// Should *really* refactor all this weird half-OOP stuff into clean functional programming:
 function draw() {
   background(101);
 
@@ -205,11 +125,9 @@ function draw() {
   pop();
 
 
-
   // if angle1 is n*angle, then will createa  flower with (n - 1) petals!!!
 
-  // Final place to grab user input:
-
+  // Final place to grab user input -- change orbital speeds:
   speed0 = planetSpeed > 0 ? planetSpeed : 0.01;
   angle += speed0;
 
@@ -220,10 +138,87 @@ function draw() {
   angle2 += speed2;
   angle3 += speed3;
 
-
+  // Draw each point that's in our path-history:
   allPoints.forEach(function(point) {
     noStroke();
     fill(253);
     ellipse(point.x, point.y, 2, 2);
   });
 } // end draw
+
+
+function changeLevels() {
+  $('#levels').empty();
+  var int = parseInt($('#lvls').val());
+  userMoons = int;
+
+  switch(int) {
+    case 1:
+      tripleDeep = false;
+      quadDeep = false;
+    break;
+
+    case 2:
+      tripleDeep = true;
+      quadDeep = false;
+    break;
+
+    case 3:
+      tripleDeep = false;
+      quadDeep = true;
+    break;
+  }
+
+  // Validate input:
+  if (int > 5) {
+    alert('Please enter a value between 1 and 3.');
+  }
+
+  $('#levels').append("<p>Planet radius from sun: <input type='number' id='planetRad' value='200'>");
+  $('#levels').append("<p>Planet speed: <input type='number' id='planetSpeed' value='0.01'>");
+
+  // Create moon input fields:
+  for (var i=0; i < int; i++) {
+    // Yes, the parentheses do make a different for i + 1:
+    $("#levels").append("<p>Moon " + (i + 1) + ":<p>Radius: <input type='number' value='25' id='rad" + i + "'></p> <p>Orbital Speed: <input type='number' value='0.02' id='speed" + i + "'></p><br>");
+  }
+
+}
+
+
+function submitSpecs() {
+  planetSpeed = parseFloat($('#planetSpeed').val());
+  // clear out:
+  radii = [];
+  speeds = [];
+  // User can change original planet's radius:
+  planetRad = parseInt($('#planetRad').val());
+  for (var i=0; i < userMoons; i++) {
+    radius = parseInt($('#rad' + i).val());
+    speed = parseFloat($('#speed' + i).val());
+    radii.push(radius);
+    speeds.push(speed);
+  }
+
+  noLoop();
+  allPoints = [];
+  background(101);
+
+  angle = 0;
+  angle1 = 0;
+  angle2 = 0;
+  angle3 = 0;
+  radius1 = planetRad;
+  radius2 = radii[0];
+  radius3 = radii.length > 1 ? radii[1] : 28;
+  radius4 = radii.length > 2 ? radii[2] : 22;
+
+  push();
+  translate(width/2, height/2);
+  rotate(angle);
+  ellipse(radius1, 0, 5, 5);
+  pop();
+
+  loop();
+
+}
