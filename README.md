@@ -16,3 +16,6 @@ Tracing out the path of the original moon:
 ## Next Steps:
 - [ ] Let users input parameters for radii and rotation speed to change the pattern.
 - [ ] Connect this animation to Fourier transformations.
+- [ ] Make more user-friendly interface.
+- [ ] Convert to React as a prototype for a React-based animations site. Real challenge will be integrating that with Angular blog.
+- [ ] The code is begging to be refactored.
